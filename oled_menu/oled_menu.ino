@@ -9,11 +9,9 @@ void display_u8g2() {
   u8g2.setFont(u8g2_font_9x15_mf);
   u8g2.firstPage();
   do {
-    for(int i = 1; i <= 4; i++){
-      if(i == selection){  
-        u8g2.setCursor(0, 15 * i);
-        u8g2.print(" >");
-      }
+    u8g2.setCursor(0, 15 * selection);
+    u8g2.print(" >");
+    for (int i = 1; i <= 4; i++) {
       u8g2.setCursor(36, 15 * i);
       u8g2.print("Option " + String(i));
     }
@@ -27,11 +25,11 @@ void setup() {
 }
 
 void loop() {
-  if(digitalRead(up) == false && selection > 1){
+  if (digitalRead(up) == false && selection > 1) {
     selection--;
   }
 
-  if(digitalRead(down) == false && selection < 4){
+  if (digitalRead(down) == false && selection < 4) {
     selection++;
   }
 
