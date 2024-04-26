@@ -54,11 +54,7 @@ void main_menu() {
           Page = 1;
           break;
       }
-      if (Page == 0) {
-        display_main();
-      } else {
-        display_sub();
-      }
+      Page == 0 ? display_main() : display_sub();
     }
   }
 }
@@ -82,11 +78,7 @@ void sub_menu() {
           Page = 0;
           break;
       }
-      if (Page == 0) {
-        display_main();
-      } else {
-        display_sub();
-      }
+      Page == 0 ? display_main() : display_sub();
     }
   }
 }
