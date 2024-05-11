@@ -3,9 +3,15 @@
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, U8X8_PIN_NONE);
 
 int main_selection = 1, sub_selection = 1;
-const byte BUTTON[] = { 39, 35, 36, 34 }; // 0 : UP, 1 : DOWN, 2 : ENTER, 3 : BACK
+const byte BUTTON[] = { 39, 35, 36, 34 };  // 0 : UP, 1 : DOWN, 2 : ENTER, 3 : BACK
 const byte LED[4] = { 4, 0, 2, 15 };
-byte Page = 0;
+
+enum State {
+  MAIN,
+  SUB
+};
+
+State state = MAIN;
 
 void display_main() {
   u8g2.setFont(u8g2_font_9x15_mf);
@@ -42,7 +48,8 @@ void display_sub() {
 void main_menu() {
   for (int i = 0; i < 3; i++) {
     if (digitalRead(BUTTON[i]) == false) {
-      while (digitalRead(BUTTON[i]) == false);
+      while (digitalRead(BUTTON[i]) == false)
+        ;
       switch (i) {
         case 0:
           main_selection = (main_selection == 1) ? 4 : main_selection - 1;
@@ -51,10 +58,18 @@ void main_menu() {
           main_selection = (main_selection == 4) ? 1 : main_selection + 1;
           break;
         case 2:
-          Page = 1;
+          state = SUB;
           break;
       }
-      Page == 0 ? display_main() : display_sub();
+
+      switch (state) {
+        case MAIN:
+          display_main();
+          break;
+        case SUB:
+          display_sub();
+          break;
+      }
     }
   }
 }
@@ -62,7 +77,8 @@ void main_menu() {
 void sub_menu() {
   for (int i = 0; i < 4; i++) {
     if (digitalRead(BUTTON[i]) == false) {
-      while (digitalRead(BUTTON[i]) == false);
+      while (digitalRead(BUTTON[i]) == false)
+        ;
       switch (i) {
         case 0:
           sub_selection = (sub_selection == 1) ? 2 : sub_selection - 1;
@@ -71,14 +87,22 @@ void sub_menu() {
           sub_selection = (sub_selection == 2) ? 1 : sub_selection + 1;
           break;
         case 2:
-          sub_selection == 1 ? digitalWrite(LED[main_selection - 1], HIGH) 
+          sub_selection == 1 ? digitalWrite(LED[main_selection - 1], HIGH)
                              : digitalWrite(LED[main_selection - 1], LOW);
           break;
         case 3:
-          Page = 0;
+          state = MAIN;
           break;
       }
-      Page == 0 ? display_main() : display_sub();
+
+      switch (state) {
+        case MAIN:
+          display_main();
+          break;
+        case SUB:
+          display_sub();
+          break;
+      }
     }
   }
 }
@@ -95,10 +119,13 @@ void setup() {
 }
 
 void loop() {
-  if (Page == 0) {
-    main_menu();
-    sub_selection = 1;
-  } else {
-    sub_menu();
+  switch (state) {
+    case MAIN:
+      main_menu();
+      sub_selection = 1;
+      break;
+    case SUB:
+      sub_menu();
+      break;
   }
 }
