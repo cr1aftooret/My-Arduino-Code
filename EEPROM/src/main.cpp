@@ -20,31 +20,26 @@ void setup() {
 void loop() {
   display();
 
-
   for (int i = 0; i <= ll; i++) {
     data = EEPROM.read(i);
 
     if (data < 255) {
       EEPROM.write(i, data + 1);
-      
       break;
     }
 
     if (i == ll) {
       EEPROM.write(i, 0);
-      
       ll++;
       EEPROM.write(256, ll);
-      
       EEPROM.write(ll, 1);
-      
       break;
     } else {
       EEPROM.write(i, 0);
     }
   }
   EEPROM.commit();
-  //delay(1000);
+  delay(1000);
 }
 
 void display() {
