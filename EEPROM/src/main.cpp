@@ -26,25 +26,25 @@ void loop() {
 
     if (data < 255) {
       EEPROM.write(i, data + 1);
-      EEPROM.commit();
+      
       break;
     }
 
     if (i == ll) {
       EEPROM.write(i, 0);
-      EEPROM.commit();
+      
       ll++;
       EEPROM.write(256, ll);
-      EEPROM.commit();
+      
       EEPROM.write(ll, 1);
-      EEPROM.commit();
+      
       break;
     } else {
       EEPROM.write(i, 0);
-      EEPROM.commit();
     }
   }
-  delay(1000);
+  EEPROM.commit();
+  //delay(1000);
 }
 
 void display() {
